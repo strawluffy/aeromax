@@ -21,3 +21,9 @@
 ![aaa](http://github.com/unicorn.png "github README.md")
 [![image]](http://www.github.com/) 
 [image]: http://github.com/github.png "github"  
+
+
+
+
+[![image-cui]](http://www.baidu.com)
+[image-cui](http://www.baidu.com/img/bdlogo.gif) "baidu.com"
