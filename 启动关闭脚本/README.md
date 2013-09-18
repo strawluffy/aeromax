@@ -14,6 +14,6 @@
 		
 ###链接
 
-[这个地方是一个链接](www.baidu.com)
+[这个地方是一个链接](http://www.baidu.com)
 
 你好
