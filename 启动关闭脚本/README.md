@@ -25,5 +25,5 @@
 
 
 
-[![image-cui]](http://www.baidu.com)
-[image-cui](http://www.baidu.com/img/bdlogo.gif) "baidu.com"
+[![image]](http://www.baidu.com)
+[image](http://www.baidu.com/img/bdlogo.gif) "www.baidu.com"
