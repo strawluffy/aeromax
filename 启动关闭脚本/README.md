@@ -21,10 +21,10 @@
 ![aaa](http://github.com/unicorn.png "github README.md")
 
 
-![这是一个链接](http://www.baidu.com "注释信息")
-
+[link](http://www.baidu.com "baidu")
+![aaaaaaa]( http://news.baidu.com/resource/img/logo_news_137_46.png "news")
 
 [![image]](http://news.baidu.com)
-[image] : http://news.baidu.com/resource/img/logo_news_137_46.png "百度新闻"
+[image]: http://news.baidu.com/resource/img/logo_news_137_46.png "baidu"
 
 
