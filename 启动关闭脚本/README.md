@@ -25,5 +25,6 @@
 
 
 [![image]](http://news.baidu.com)
-[image] : http://news.baidu.com/view.html "注释信息"
+[image] : http://news.baidu.com/resource/img/logo_news_137_46.png "百度新闻"
+
 
