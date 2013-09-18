@@ -19,11 +19,10 @@
 你好
 
 ![aaa](http://github.com/unicorn.png "github README.md")
-[![image]](http://www.github.com/) 
-[image]: http://github.com/github.png "github"  
 
 
 
 
-[![image-cuizz]](http://www.baidu.com)
-[image-cuizz](http://www.baidu.com/img/bdlogo.gif) "www.baidu.com"
+
+[![image]](http://www.baidu.com)
+[image](http://www.baidu.com/img/bdlogo.gif) "www.baidu.com"
