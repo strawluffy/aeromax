@@ -6,3 +6,12 @@
 --
 ###小标题
 啦啦
+
+###代码：
+
+		#!/bin/sh
+		echo "hello,world"
+		
+###链接
+
+[这个地方是一个链接](www.baidu.com)
