@@ -21,8 +21,9 @@
 ![aaa](http://github.com/unicorn.png "github README.md")
 
 
+![这是一个链接](http://www.baidu.com "注释信息")
 
 
+[![image]](http://news.baidu.com)
+[image] : http://news.baidu.com/view.html "注释信息"
 
-[![image]](http://www.baidu.com)
-[image]: http://www.baidu.com/img/bdlogo.gif "www.baidu.com"
