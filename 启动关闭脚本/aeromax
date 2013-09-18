@@ -7,21 +7,13 @@
 # No 	Who    	When		What
 # ---	--- 	----      	----
 # Num	NAME  	DAY/MON/YEAR  	MODIFIED
-# 1	CZZ	09/09/2013	add
-#
+# 1		CZZ		09/09/2013		add
+# 2 	CZZ		09/17/2013		MODIFY
 
 
 source /etc/profile
 
 USAGE="`basename $0` [ start | stop ] PROGRAM_PATH"
-
-
-#AEROMAX_CORE="cn.ait.app.aeromax.AeromaxMain"
-#CORE_PATH="/usr/local/AeroMAX"
-#AEROMAX_STATUS_LOG="aeromax_status.log"
-#AEROMAX_CORE_ID="`ps -ef | grep "$AEROMAX_CORE" | grep -v grep | awk '{print $2}'`"
-#PARA="java -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.access.file=jmxremote.access -Djava.library.path=/usr/lib64/rxtx/ -Dcom.sun.management.jmxremote.password.file=jmxremote.password -Xmx1024m -cp .:./lib/ojdbc6.jar:./lib/ojdbc6dms.jar:./lib/*:./lib/umc/*:./lib/mina/*:/usr/share/java/RXTXcomm.jar cn.ait.app.aeromax.AeromaxMain"
-
 
 process_check()
 {
@@ -88,7 +80,6 @@ process_run()
 		fi
 	done
 }
-
 
 aeromax_deal() {
 
