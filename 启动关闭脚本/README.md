@@ -18,13 +18,13 @@
 
 你好
 
-![aaa](http://github.com/unicorn.png "github README.md")
 
 
-[link](http://www.baidu.com "baidu")
-![aaaaaaa]( http://news.baidu.com/resource/img/logo_news_137_46.png "news")
 
-[![image]](http://news.baidu.com)
-[image]: http://news.baidu.com/resource/img/logo_news_137_46.png "baidu"
 
+
+[a](http://www.baidu.com  "index baidu")
+![a](http://www.baidu.com/img/bdlogo.gif "baidu")
+[![image]](http://www.baidu.com)
+[image]: http://www.baidu.com/img/bdlogo.gif "baidu"
 
