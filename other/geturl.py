@@ -9,14 +9,15 @@ import urllib2
 import os
 import yaml
 import send_email
-
-salt_rpm_root='http://dl.fedoraproject.org/pub/epel/6/x86_64/'
+import subprocess
+import time 
+rpm_root='http://dl.fedoraproject.org/pub/epel/6/x86_64/'
 record_last_rpm_file="record.db"
-urlpattern=['salt','salt-api','salt-cloud','salt-master','salt-minion']
+urlpattern=['salt','salt-api','salt-cloud','salt-master','salt-minion','cobbler','cobbler-web']
 
 def flush_record_db(rpm_dict):
 	file=open(record_last_rpm_file,'w')
-	yaml.dump(rpm_dict,file)
+	yaml.dump(rpm_dict,file,default_flow_style=False)
 	file.close()
 
 
@@ -27,7 +28,7 @@ def record_db_info(rpm_dict):
 	'''
 	if not os.path.isfile(record_last_rpm_file):
 		file=open(record_last_rpm_file,'w')
-		yaml.dump(rpm_dict,file)
+		yaml.dump(rpm_dict,file,default_flow_style=False)
 		file.close()
 	file=open(record_last_rpm_file,'r')
 	myfile=yaml.load(file)
@@ -42,12 +43,12 @@ def epel_rpm_info():
 	rpm_dict={}
 	salt_rpm=[]
 	for salt in urlpattern:
-		openurl=urllib2.urlopen(salt_rpm_root+'repoview/'+salt+'.html')
-		temp_url=openurl.readlines()
-		for i in temp_url:
-			if re.findall(r'(salt.*rpm)"',i):
-				salt_rpm.extend(re.findall(r'(salt.*rpm)"',i))
-	for i in range(5):
+		openurl=urllib2.urlopen(rpm_root+'repoview/'+salt+'.html')
+		compat=re.compile(salt+'[\w\-\.]+rpm')
+		for i in openurl.readlines():
+			if re.findall(compat,i):
+				salt_rpm.extend(re.findall(compat,i))
+	for i in range(len(urlpattern)):
 			rpm_dict[urlpattern[i]]=salt_rpm[i]
 	return rpm_dict
 
@@ -73,7 +74,7 @@ def get_last_version(salt_rpm):
 	
 	for salt in salt_rpm:
 		print '我们将下载：'+salt_rpm[salt]
-		get_rpm=urllib2.urlopen(salt_rpm_root+salt_rpm[salt])
+		get_rpm=urllib2.urlopen(rpm_root+salt_rpm[salt])
 		local_file=open(salt_rpm[salt],'wb')
 		local_file.write(get_rpm.read())
 		local_file.close()
@@ -82,13 +83,17 @@ def main():
 	E_MAIL=''
 	download_rpm=get_should_upgrade_salt()
 	if len(download_rpm) == 0:
-		print '没有需要下载的rpm'
+		file=open('/var/www/cobbler/ks_mirror/rpm_temp/nodownload.log','a')
+		print >> file,time.asctime()+' : 没有需要下载的rpm'
+		file.close()
 	else:
 		get_last_version(download_rpm)
 		for i in download_rpm:
 			E_MAIL+=download_rpm[i]
 		msg=send_email.msg_interg("我们将要下载："+E_MAIL)
 		send_email.send_email(send_email.from_addr,send_email.to_addrs,msg)
+		subprocess.Popen('/bin/sh /var/www/cobbler/ks_mirror/rpm_temp/deploy.sh',shell=True) 
+
 
 if __name__ == '__main__':
 	main()
