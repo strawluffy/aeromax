@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+########################################################################################
+#
+# 脚本为nagios的插件检测脚本，用于检测主机上aeromax核心服务的状态:
+#
+#
+#       ID       date           Name    Note
+#       1       2014/05/06      CZZ     
+#       NOTE:
+#        
+#       EXIT CODE 
+#
+#	0	aeromax核心服务在双机上某一台服务器上面运行
+#	1	aeromax核心服务没有在双机中任何一台服务器上面运行       
+#
+#
+########################################################################################
+#
+
+PROCESS=0
+PROCESS=$(ps -ef | grep AeromaxMain | grep -v grep | awk '{print $2}')
+RUN_SERVER=$(crm status | grep  'Aeromax' | grep heartbeat | awk '{print $4}' | uniq)
+LOCAL_SERVER=$(hostname)
+if [ "$RUN_SERVER" = "aeromax1" ];then
+	VIEW_HOST="核心主机A"
+elif [ "$RUN_SERVER" = "aeromax2" ];then
+	VIEW_HOST="核心主机B"
+fi
+if [ "$RUN_SERVER" = "$LOCAL_SERVER" ];then
+	echo "OK - AeroMAX核心服务在本机上运行正常" 
+       	exit 0
+elif [ -z '$RUN_SERVER' ];then
+	echo "CRITICAL - The core process of aeromax is down"
+       	exit 2
+else
+	echo "OK - AeroMAX核心服务在 $VIEW_HOST 上运行正常" 
+        exit 0 
+fi
