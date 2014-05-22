@@ -1,44 +1,42 @@
 #!/bin/sh
-#
-# 脚本用于监控p2000存储服务器的控制器信息
-# NAME DATE - VERSION
-# ------------------------------------------
-# ########  Script Modifications  ##########
-# ------------------------------------------
-# No    Who     WhenWhat
-# ---   ---     ----        ----
-# NumberNAME    DAY/MON/YEAR    MODIFIED
-# 1     CZZ     05/21/2014      add
-#
-#
-#
+source /etc/profile
+. /etc/init.d/functions
 cmd="show controllers"
 tag="1"
-CONTROL_NAME=( "A"  "B" )
+CONTROL_NAME=( "上"  "下" )
 NAGIOS_PLUGINS_PATH="/usr/lib64/nagios/plugins"
 source $NAGIOS_PLUGINS_PATH/connect_status.sh
 b=0
-$NAGIOS_PLUGINS_PATH/expect_login_p2000 "$STOR_SERVER" | sed -n "/show sensor-status/,/Press any/p" >> $NAGIOS_PLUGINS_PATH/a.log
+$NAGIOS_PLUGINS_PATH/expect_login_p2000 "$STOR_SERVER" | grep -v "Press" > $NAGIOS_PLUGINS_PATH/a.log
 
-for i in `cat $NAGIOS_PLUGINS_PATH/a.log  | sed -n "/$cmd/,/Success/p" | grep -i  "Health:" | awk "{print $2}"`
+for i in `cat $NAGIOS_PLUGINS_PATH/a.log  | sed -n "/$cmd/,/Success/p" | grep -i  "Health:"`
 
 do
         if [ ! $i == "Health:"  ];then
-                a[$b]=$i
-                let b=b+1
+
+		if echo $i | grep "OK" >> /dev/null 2>&1;then
+                	a[$b]=OK
+                	let b=b+1
+		elif echo $i | grep "Degraded" >> /dev/null 2>&1;then
+			a[$b]=Degraded
+                        let b=b+1
+		else
+			a[$b]=UNKNOWN
+                        let b=b+1
+			
+		fi
         fi
 done
 
 
-
 for i in 0 1
 do
-        if  echo "${a[$i]}" | grep "OK" >> /dev/null 2>&1;then
+        if  [ "${a[$i]}" ==  "OK" ];then
                 RETURN="${CONTROL_NAME[$i]}控制器运行正常"
-        elif  echo "${a[$i]}" | grep "Degraded" >> /dev/null 2>&1;then
+        elif  [ "${a[$i]}" = "Degraded" ] ;then
                 RETURN="${CONTROL_NAME[$i]}控制器处于降级运行状态"
                 let RESULT=RESULT+3
-        else
+        elif  [ "${a[$i]}" = "UNKNOWN" ] ;then
                 RETURN="${CONTROL_NAME[$i]}控制器处于未知状态"
                 let RESULT=RESULT+10
         fi

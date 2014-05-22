@@ -1,5 +1,4 @@
 #!/usr/bin/expect -f
-
 set login_user "manage"
 set stor_svr_ip [ lindex $argv 0 ]
 
@@ -20,6 +19,7 @@ expect {
 }
 expect "#"
 send "show sensor-status\r"
+send "e\r"
 expect "#"
 send "show power-supplies\r"
 expect "#"
