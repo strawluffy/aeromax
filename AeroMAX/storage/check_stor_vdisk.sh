@@ -1,4 +1,15 @@
 #!/bin/sh
+#
+# 脚本用于监控p2000存储服务器的磁盘阵列信息
+# NAME DATE - VERSION
+# ------------------------------------------
+# ########  Script Modifications  ##########
+# ------------------------------------------
+# No    Who     WhenWhat
+# ---   ---     ----        ----
+# NumberNAME    DAY/MON/YEAR    MODIFIED
+# 1     CZZ     05/21/2014      add
+#
 cmd="show vdisks"
 NAGIOS_PLUGINS_PATH="/usr/lib64/nagios/plugins"
 if [ ! -f $NAGIOS_PLUGINS_PATH/a.log ];then

@@ -1,11 +1,24 @@
 #!/bin/sh
+#
+# 脚本用于监控p2000存储服务器的控制器信息
+# NAME DATE - VERSION
+# ------------------------------------------
+# ########  Script Modifications  ##########
+# ------------------------------------------
+# No    Who     WhenWhat
+# ---   ---     ----        ----
+# NumberNAME    DAY/MON/YEAR    MODIFIED
+# 1     CZZ     05/21/2014      add
+#
+#
+#
 cmd="show controllers"
 tag="1"
 CONTROL_NAME=( "A"  "B" )
 NAGIOS_PLUGINS_PATH="/usr/lib64/nagios/plugins"
 source $NAGIOS_PLUGINS_PATH/connect_status.sh
 b=0
-$NAGIOS_PLUGINS_PATH/my_expect_1 "$STOR_SERVER" | sed -n "/show sensor-status/,/Press any/p" >> $NAGIOS_PLUGINS_PATH/a.log
+$NAGIOS_PLUGINS_PATH/expect_login_p2000 "$STOR_SERVER" | sed -n "/show sensor-status/,/Press any/p" >> $NAGIOS_PLUGINS_PATH/a.log
 
 for i in `cat $NAGIOS_PLUGINS_PATH/a.log  | sed -n "/$cmd/,/Success/p" | grep -i  "Health:" | awk "{print $2}"`
 

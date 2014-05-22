@@ -1,0 +1,32 @@
+#!/usr/bin/expect -f
+
+set login_user "manage"
+set stor_svr_ip [ lindex $argv 0 ]
+
+set timeout 10
+set password  "!manage"
+spawn ssh $login_user@$stor_svr_ip
+expect {
+	"(yes/no)" {
+		send "yes\r"
+		exp_continue
+		}
+	"password:" {
+		send "$password\r"
+	}
+	"Password:" {
+                send "$password\r"
+        }
+}
+expect "#"
+send "show sensor-status\r"
+expect "#"
+send "show power-supplies\r"
+expect "#"
+send "show vdisks\r"
+expect "#"
+send "show controllers\r"
+send "e\r"
+send "exit\r"
+expect eof
+

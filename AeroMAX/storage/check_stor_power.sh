@@ -1,4 +1,15 @@
 #!/bin/sh
+##
+# 脚本用于监控p2000存储服务器的电源信息
+# NAME DATE - VERSION
+# ------------------------------------------
+# ########  Script Modifications  ##########
+# ------------------------------------------
+# No    Who     WhenWhat
+# ---   ---     ----        ----
+# NumberNAME    DAY/MON/YEAR    MODIFIED
+# 1     CZZ     05/21/2014      add
+#
 cmd="show power-supplies"
 POWER_SUPPLY=( "左侧电源" "右侧电源" )
 local=0
