@@ -1,4 +1,21 @@
 #!/bin/sh       
+#
+########################################################################################
+#
+# 脚本为nagios的插件检测脚本，用于检测主机上串口服务器(MOXA)串口进出方向流量的状态:
+#
+#
+#       ID       date           Name    Note
+#       1       2014/05/23      CZZ     
+#       NOTE:
+#        
+#
+#       脚本用于监控每个串口的浏览状态，取2秒钟之间的差额，接收方向大于500字节，发送方向
+#       大于500，就说明串口处于工作状态。
+#
+#
+########################################################################################
+#
 BUSY_NUM=0
 FREE_NUM=0
 IPADDRESS="$2"
@@ -23,7 +40,7 @@ NORMAL_DEAL(){
 		#echo ~~~~~~~~~~~~~~~~~~~~
 		#echo "RECE:${RESULT_DATA[$num]}  SEND:${RESULT_DATA[$num+16]}" 
 		#echo ~~~~~~~~~~~~~~~~~~~~
-		if [ ${RESULT_DATA[$num]} -lt 500  -a  ${RESULT_DATA[$num+16]} -eq 0 ]
+		if [ ${RESULT_DATA[$num]} -lt 500  -a  ${RESULT_DATA[$num+16]} -lt 500 ]
 		then
 			let al_num=num+1
        	        	SER_FREE[$FREE_NUM]=${al_num}
@@ -38,7 +55,7 @@ NORMAL_DEAL(){
 		echo "OK - 串口: 所有串口处于空闲状态"
 		exit 0
 	else
-		echo "OK - 串口:${SER_BUSY[@]} 处于繁忙状态;串口:${SER_FREE[@]}空闲"
+		echo "OK - 串口:${SER_BUSY[@]} 繁忙;串口:${SER_FREE[@]} 空闲"
 		exit 0
 	fi
 }

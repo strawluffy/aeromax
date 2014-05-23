@@ -1,4 +1,18 @@
 #!/bin/sh
+#
+########################################################################################
+#
+# 脚本为nagios的插件检测脚本，用于检测主机上串口服务器(MOXA)已经启动时间:
+#
+#
+#       ID       date           Name    Note
+#       1       2014/05/23      CZZ     
+#       NOTE:
+#        
+#
+########################################################################################
+#
+
 IPADDRESS="$2"
 if $(snmpwalk -v 2c -c public $IPADDRESS SysUpTime > /dev/null 2>&1);then
 	UPTIME=$(snmpwalk -v 2c -c public $IPADDRESS SysUpTime | awk '{print $5,$6,$7}')
