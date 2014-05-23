@@ -1,0 +1,30 @@
+#!/bin/sh
+NIC_NUM=16
+UP_NUM=0
+DOWN_NUM=0
+MAIN_COUNT=1
+IPADDRESS="$2"
+if $(snmpwalk -v 2c -c public $IPADDRESS ifOperStatus > /dev/null 2>&1);then
+	for num in $(snmpwalk -v 2c -c public $IPADDRESS ifOperStatus | cut -d" " -f4 |awk -F'(' '{print $1}' | tail -n 16)
+	do
+		if [ "$num" = 'up' ];then
+	                SER_STATUS_UP[$UP_NUM]="serial-${MAIN_COUNT}"
+	                ((UP_NUM=$UP_NUM+1))
+		else
+	                SER_STATUS_DOWN[$DOWN_NUM]="serial-${MAIN_COUNT}"
+                	((DOWN_NUM=$DOWN_NUM+1))
+        	fi
+		((MAIN_COUNT=$MAIN_COUNT+1))
+
+	done
+	if [ ${#SER_STATUS_UP[@]} -eq 0 ];then
+		echo "OK - 没有任何串口启用"
+		exit 0
+	else
+		echo "OK - ${SER_STATUS_UP[@]} :up"
+                exit 0
+	fi
+else
+	echo "CRITICAL - server $IPADDRESS is not alive"
+        exit 2
+fi

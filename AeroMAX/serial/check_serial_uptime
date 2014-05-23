@@ -1,0 +1,9 @@
+#!/bin/sh
+IPADDRESS="$2"
+if $(snmpwalk -v 2c -c public $IPADDRESS SysUpTime > /dev/null 2>&1);then
+	UPTIME=$(snmpwalk -v 2c -c public $IPADDRESS SysUpTime | awk '{print $5,$6,$7}')
+	echo "OK - 系统平稳运行时间为: $UPTIME "
+else
+        echo "CRITICAL - server $IPADDRESS is not alive"
+        exit 2
+fi

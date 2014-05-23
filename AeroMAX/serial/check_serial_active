@@ -1,0 +1,50 @@
+#!/bin/sh       
+BUSY_NUM=0
+FREE_NUM=0
+IPADDRESS="$2"
+COUNT_FLOW(){
+	SEND_FLOW_NUM="`snmpwalk -v 2c -c public $IPADDRESS  ifInOctets | awk '{print $4}' | tail -n 16`"
+	RECE_FLOW_NUM="`snmpwalk -v 2c -c public $IPADDRESS  ifOutOctets | awk '{print $4}' | tail -n 16`"
+	FLOW_NUM="$RECE_FLOW_NUM $SEND_FLOW_NUM"
+	echo $FLOW_NUM
+}
+NORMAL_DEAL(){
+	BEF_DATA=($(COUNT_FLOW ))
+	sleep 2 
+	AFT_DATA=($(COUNT_FLOW))
+	((CHANGE_VAL=${#BEF_DATA[@]}/2-1))
+	for num in  ${!BEF_DATA[@]}
+	do
+		((RESULT_DATA[$num]=${AFT_DATA[$num]}-${BEF_DATA[$num]}))
+	done
+	num=0
+	for num in  $(seq 0 $CHANGE_VAL)
+	do
+		#echo ~~~~~~~~~~~~~~~~~~~~
+		#echo "RECE:${RESULT_DATA[$num]}  SEND:${RESULT_DATA[$num+16]}" 
+		#echo ~~~~~~~~~~~~~~~~~~~~
+		if [ ${RESULT_DATA[$num]} -lt 500  -a  ${RESULT_DATA[$num+16]} -eq 0 ]
+		then
+			let al_num=num+1
+       	        	SER_FREE[$FREE_NUM]=${al_num}
+       	        	((FREE_NUM=$FREE_NUM+1))
+       		else
+			let al_num=num+1
+                	SER_BUSY[$BUSY_NUM]=${al_num}
+                	((BUSY_NUM=$BUSY_NUM+1))
+        	fi
+	done
+	if [ ${#SER_BUSY[@]} -eq 0 ];then
+		echo "OK - 串口: 所有串口处于空闲状态"
+		exit 0
+	else
+		echo "OK - 串口:${SER_BUSY[@]} 处于繁忙状态;串口:${SER_FREE[@]}空闲"
+		exit 0
+	fi
+}
+if $(snmpwalk -v 2c -c public $IPADDRESS ifInOctets > /dev/null 2>&1);then
+	NORMAL_DEAL
+else
+        echo "CRITICAL - 串口服务器 $IPADDRESS 处于关闭状态"
+        exit 2
+fi
