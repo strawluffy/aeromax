@@ -5,11 +5,13 @@ cmd="show controllers"
 tag="1"
 CONTROL_NAME=( "上"  "下" )
 NAGIOS_PLUGINS_PATH="/usr/lib64/nagios/plugins"
+NAGIOS_PATH="/etc/nagios"
+STOR_SERVER="$2"
 source $NAGIOS_PLUGINS_PATH/connect_status.sh
 b=0
-$NAGIOS_PLUGINS_PATH/expect_login_p2000 "$STOR_SERVER" | grep -v "Press" > $NAGIOS_PLUGINS_PATH/a.log
+$NAGIOS_PLUGINS_PATH/expect_login_p2000 "$STOR_SERVER" | grep -v "Press" > $NAGIOS_PATH/a.log
 
-for i in `cat $NAGIOS_PLUGINS_PATH/a.log  | sed -n "/$cmd/,/Success/p" | grep -i  "Health:"`
+for i in `cat $NAGIOS_PATH/a.log  | sed -n "/$cmd/,/Success/p" | grep -i  "Health:"`
 
 do
         if [ ! $i == "Health:"  ];then
