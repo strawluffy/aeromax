@@ -20,7 +20,7 @@
 
 PROCESS=0
 PROCESS=$(ps -ef | grep AeromaxMain | grep -v grep | awk '{print $2}')
-RUN_SERVER=$(crm status | grep  'Aeromax' | grep heartbeat | awk '{print $4}' | uniq)
+RUN_SERVER=$(crm status | grep  'Aeromax' | grep heartbeat | awk '{print $4}' | tail -n 1)
 LOCAL_SERVER=$(hostname)
 if [ "$RUN_SERVER" = "aeromax1" ];then
 	VIEW_HOST="核心主机A"
@@ -30,7 +30,7 @@ fi
 if [ "$RUN_SERVER" = "$LOCAL_SERVER" ];then
 	echo "OK - AeroMAX核心服务在本机上运行正常" 
        	exit 0
-elif [ -z '$RUN_SERVER' ];then
+elif [ -z "$RUN_SERVER" ];then
 	echo "CRITICAL - The core process of aeromax is down"
        	exit 2
 else
